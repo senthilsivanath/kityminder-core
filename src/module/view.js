@@ -131,9 +131,9 @@ define(function(require, exports, module) {
                 'inputready.mousemove inputready.touchmove',
                 function(e) {
                     if (e.type == 'touchmove') {
-                        e.preventDefault(); // 阻止浏览器的后退事件
+                     //   e.preventDefault(); // 阻止浏览器的后退事件
                     }
-                    if (!isTempDrag) return;
+                    //if (!isTempDrag) return;
                     var offset = kity.Vector.fromPoints(lastPosition, e.getPosition('view'));
                     if (offset.length() > 10) {
                         this.setStatus('hand', true);
@@ -143,12 +143,16 @@ define(function(require, exports, module) {
                 })
 
             .on('hand.beforemousedown hand.beforetouchstart', function(e) {
-                // 已经被用户打开拖放模式
+               // 已经被用户打开拖放模式
                 if (dragger.isEnabled()) {
                     lastPosition = e.getPosition('view');
-                    e.stopPropagation();
-                    var paper = dragger._minder.getPaper();
+                    var node = e.getTargetNode()
+                    if(!node){
+                       // e.stopPropagation();                    
+                        var paper = dragger._minder.getPaper();
                     paper.setStyle('cursor', '-webkit-grabbing');
+                    }
+                    
                 }
             })
 
@@ -159,9 +163,9 @@ define(function(require, exports, module) {
                     // 当前偏移加上历史偏移
                     var offset = kity.Vector.fromPoints(lastPosition, currentPosition);
                     dragger.move(offset);
-                    e.stopPropagation();
-                    e.preventDefault();
-                    e.originEvent.preventDefault();
+                    //e.stopPropagation();
+                    //e.preventDefault();
+                    //e.originEvent.preventDefault();
                     lastPosition = currentPosition;
                 }
             })

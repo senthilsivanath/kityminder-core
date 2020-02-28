@@ -117,7 +117,7 @@ define(function(require, exports, module) {
                 });
             },
             'events': {
-                'mousedown': function(e) {
+                'mousedown touchstart': function(e) {
 
                     var downNode = e.getTargetNode();
 
@@ -127,7 +127,7 @@ define(function(require, exports, module) {
                         this.removeAllSelectedNodes();
                         marqueeActivator.selectStart(e);
 
-                        this.setStatus('normal');
+                        //this.setStatus('normal');
                     }
 
                     // 点中了节点，并且按了 shift 键：
@@ -150,8 +150,8 @@ define(function(require, exports, module) {
                         lastDownPosition = e.getPosition();
                     }
                 },
-                'mousemove': marqueeActivator.selectMove,
-                'mouseup': function(e) {
+                'mousemove touchmove': marqueeActivator.selectMove,
+                'mouseup touchend': function(e) {
                     var upNode = e.getTargetNode();
 
                     // 如果 mouseup 发生在 lastDownNode 外，是无需理会的

@@ -143,7 +143,7 @@ define(function(require, exports, module) {
 
         _bindEvents: function() {
             /* jscs:disable maximumLineLength */
-            this._paper.on('click dblclick mousedown contextmenu mouseup mousemove mouseover mousewheel DOMMouseScroll touchstart touchmove touchend dragenter dragleave drop', this._firePharse.bind(this));
+            this._paper.on('click dblclick mousedown contextmenu mouseup mousemove mouseover touchstart touchmove touchend dragenter dragleave drop', this._firePharse.bind(this));
             if (window) {
                 window.addEventListener('resize', this._firePharse.bind(this));
             }

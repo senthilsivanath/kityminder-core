@@ -28,27 +28,97 @@
 </head>
 <body>
     <script id="minder-view" type="application/kityminder" minder-data-type="json">
-    {
-        "root": {
-            "data": {
-                "text": "百度产品",
-                "image": "https://www.baidu.com/img/bd_logo1.png?where=super",
-                "imageSize": { "width": 270, "height": 129 }
+        {
+            "root": {
+                "data": {
+                    "id": "c0f1ffajgxk0",
+                    "created": 1580987875318,
+                    "text": "MainTopic",
+                    "note": "# hi hello\nasdfasd\nasdf\nasdf\nasd\nasdf"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "c0f1fjfcrjc0",
+                            "created": 1580987884316,
+                            "text": "topic",
+                            "expandState": "expand"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "c0f1fktuaxs0",
+                                    "created": 1580987887369,
+                                    "text": "topic"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "c0f1flchua80",
+                                    "created": 1580987888497,
+                                    "text": "topic"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "c0f1fltum1s0",
+                                    "created": 1580987889546,
+                                    "text": "topic"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "c0f1fke46io0",
+                            "created": 1580987886418,
+                            "text": "topic",
+                            "note": "#hello\nadsf\nasdf\nasdf\nasdf\n"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "c0f1rdah5wg0",
+                            "created": 1580988811331,
+                            "text": "topic"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "c0f1rejz0cw0",
+                            "created": 1580988814082,
+                            "text": "topic"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "c0f1rfr1hls0",
+                                    "created": 1580988816686,
+                                    "text": "topic"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "c0f1rf0smoo0",
+                            "created": 1580988815099,
+                            "text": "topic"
+                        },
+                        "children": []
+                    }
+                ]
             },
-            "children": [
-                { "data": { "text": "新闻" } },
-                { "data": { "text": "网页", "priority": 1 } },
-                { "data": { "text": "贴吧", "priority": 2 } },
-                { "data": { "text": "知道", "priority": 2 } },
-                { "data": { "text": "音乐", "priority": 3 } },
-                { "data": { "text": "图片", "priority": 3 } },
-                { "data": { "text": "视频", "priority": 3 } },
-                { "data": { "text": "地图", "priority": 3 } },
-                { "data": { "text": "百科", "priority": 3 } },
-                { "data": { "text": "更多", "hyperlink": "http://www.baidu.com/more" } }
-            ]
+            "template": "filetree",
+            "theme": "fresh-green",
+            "version": "1.4.43"
         }
-    }
     </script>
 </body>
 
@@ -57,9 +127,21 @@
     // 创建 km 实例
     /* global kityminder */
     var km = window.km = new kityminder.Minder();
-    km.setup('#minder-view');
-    km.disable();
-    km.execCommand('hand');
+     km.setup('#minder-view');
+    // km.disable();
+     km.execCommand('hand');
+    km.on('selectionchange', function() {
+	var node = km.getSelectedNode();
+	if (node) {
+		console.log({node});
+	}
+
+   
+});
+km.on('shownoterequest',(ev)=>{ 
+
+console.log(ev)
+})
 </script>
 
 </html>

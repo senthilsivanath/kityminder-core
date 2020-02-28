@@ -1,9 +1,9 @@
 /*!
  * ====================================================
- * Kity Minder Core - v1.4.50 - 2018-09-17
+ * Kity Minder Core - v1.4.50 - 2020-02-10
  * https://github.com/fex-team/kityminder-core
  * GitHub: https://github.com/fex-team/kityminder-core.git 
- * Copyright (c) 2018 Baidu FEX; Licensed BSD-3-Clause
+ * Copyright (c) 2020 Baidu FEX; Licensed BSD-3-Clause
  * ====================================================
  */
 
@@ -1178,7 +1178,7 @@ _p[13] = {
             },
             _bindEvents: function() {
                 /* jscs:disable maximumLineLength */
-                this._paper.on("click dblclick mousedown contextmenu mouseup mousemove mouseover mousewheel DOMMouseScroll touchstart touchmove touchend dragenter dragleave drop", this._firePharse.bind(this));
+                this._paper.on("click dblclick mousedown contextmenu mouseup mousemove mouseover touchstart touchmove touchend dragenter dragleave drop", this._firePharse.bind(this));
                 if (window) {
                     window.addEventListener("resize", this._firePharse.bind(this));
                 }
@@ -1447,13 +1447,9 @@ _p[16] = {
         }
         Minder.registerInitHook(function(option) {
             this.setDefaultOptions({
-                enableKeyReceiver: true
+                enableKeyReceiver: false
             });
-            if (this.getOption("enableKeyReceiver")) {
-                this.on("paperrender", function() {
-                    this._initKeyReceiver();
-                });
-            }
+            if (this.getOption("enableKeyReceiver")) {}
         });
         kity.extendClass(Minder, {
             _initKeyReceiver: function() {
@@ -7069,14 +7065,13 @@ _p[59] = {
                     });
                 },
                 events: {
-                    mousedown: function(e) {
+                    "mousedown touchstart": function(e) {
                         var downNode = e.getTargetNode();
                         // 没有点中节点：
                         //     清除选中状态，并且标记选区开始位置
                         if (!downNode) {
                             this.removeAllSelectedNodes();
                             marqueeActivator.selectStart(e);
-                            this.setStatus("normal");
                         } else if (e.isShortcutKey("Ctrl")) {
                             this.toggleSelect(downNode);
                         } else if (!downNode.isSelected()) {
@@ -7086,8 +7081,8 @@ _p[59] = {
                             lastDownPosition = e.getPosition();
                         }
                     },
-                    mousemove: marqueeActivator.selectMove,
-                    mouseup: function(e) {
+                    "mousemove touchmove": marqueeActivator.selectMove,
+                    "mouseup touchend": function(e) {
                         var upNode = e.getTargetNode();
                         // 如果 mouseup 发生在 lastDownNode 外，是无需理会的
                         if (upNode && upNode == lastDownNode) {
@@ -7569,10 +7564,8 @@ _p[62] = {
                         isTempDrag = true;
                     }
                 }).on("normal.mousemove normal.touchmove " + "readonly.mousemove readonly.touchmove " + "inputready.mousemove inputready.touchmove", function(e) {
-                    if (e.type == "touchmove") {
-                        e.preventDefault();
-                    }
-                    if (!isTempDrag) return;
+                    if (e.type == "touchmove") {}
+                    //if (!isTempDrag) return;
                     var offset = kity.Vector.fromPoints(lastPosition, e.getPosition("view"));
                     if (offset.length() > 10) {
                         this.setStatus("hand", true);
@@ -7583,9 +7576,12 @@ _p[62] = {
                     // 已经被用户打开拖放模式
                     if (dragger.isEnabled()) {
                         lastPosition = e.getPosition("view");
-                        e.stopPropagation();
-                        var paper = dragger._minder.getPaper();
-                        paper.setStyle("cursor", "-webkit-grabbing");
+                        var node = e.getTargetNode();
+                        if (!node) {
+                            // e.stopPropagation();                    
+                            var paper = dragger._minder.getPaper();
+                            paper.setStyle("cursor", "-webkit-grabbing");
+                        }
                     }
                 }).on("hand.beforemousemove hand.beforetouchmove", function(e) {
                     if (lastPosition) {
@@ -7593,9 +7589,9 @@ _p[62] = {
                         // 当前偏移加上历史偏移
                         var offset = kity.Vector.fromPoints(lastPosition, currentPosition);
                         dragger.move(offset);
-                        e.stopPropagation();
-                        e.preventDefault();
-                        e.originEvent.preventDefault();
+                        //e.stopPropagation();
+                        //e.preventDefault();
+                        //e.originEvent.preventDefault();
                         lastPosition = currentPosition;
                     }
                 }).on("mouseup touchend", dragEnd);
@@ -7947,6 +7943,7 @@ _p[63] = {
                 events: {
                     "normal.mousewheel readonly.mousewheel": function(e) {
                         if (!e.originEvent.ctrlKey && !e.originEvent.metaKey) return;
+                        console.log("mouse wheel move ad ");
                         var delta = e.originEvent.wheelDelta;
                         var me = this;
                         // 稀释

@@ -162,7 +162,7 @@ define(function(require, exports, module) {
             events: {
                 'normal.mousewheel readonly.mousewheel': function(e) {
                     if (!e.originEvent.ctrlKey && !e.originEvent.metaKey) return;
-
+                    console.log('mouse wheel move ad ')
                     var delta = e.originEvent.wheelDelta;
                     var me = this;
                     // 稀释

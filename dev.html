@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>KityMinder Example</title>
@@ -26,30 +27,102 @@
 
     <script type="text/javascript" src="node_modules/kity/dist/kity.js"></script>
 </head>
+
 <body>
     <script id="minder-view" type="application/kityminder" minder-data-type="json">
-    {
-        "root": {
-            "data": {
-                "text": "百度产品",
-                "image": "https://www.baidu.com/img/bd_logo1.png?where=super",
-                "imageSize": { "width": 270, "height": 129 }
+        {
+            "root": {
+                "data": {
+                    "id": "c0f1ffajgxk0",
+                    "created": 1580987875318,
+                    "text": "MainTopic",
+                    "note": "# hi hello\nasdfasd\nasdf\nasdf\nasd\nasdf"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "c0f1fjfcrjc0",
+                            "created": 1580987884316,
+                            "text": "topic",
+                            "expandState": "expand"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "c0f1fktuaxs0",
+                                    "created": 1580987887369,
+                                    "text": "topic"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "c0f1flchua80",
+                                    "created": 1580987888497,
+                                    "text": "topic"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "c0f1fltum1s0",
+                                    "created": 1580987889546,
+                                    "text": "topic"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "c0f1fke46io0",
+                            "created": 1580987886418,
+                            "text": "topic",
+                            "note": "#hello\nadsf\nasdf\nasdf\nasdf\n"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "c0f1rdah5wg0",
+                            "created": 1580988811331,
+                            "text": "topic"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "c0f1rejz0cw0",
+                            "created": 1580988814082,
+                            "text": "topic"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "c0f1rfr1hls0",
+                                    "created": 1580988816686,
+                                    "text": "topic"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "c0f1rf0smoo0",
+                            "created": 1580988815099,
+                            "text": "topic"
+                        },
+                        "children": []
+                    }
+                ]
             },
-            "children": [
-                { "data": { "text": "新闻" } },
-                { "data": { "text": "网页", "priority": 1 } },
-                { "data": { "text": "贴吧", "priority": 2 } },
-                { "data": { "text": "知道", "priority": 2 } },
-                { "data": { "text": "音乐", "priority": 3 } },
-                { "data": { "text": "图片", "priority": 3 } },
-                { "data": { "text": "视频", "priority": 3 } },
-                { "data": { "text": "地图", "priority": 3 } },
-                { "data": { "text": "百科", "priority": 3 } },
-                { "data": { "text": "更多", "hyperlink": "http://www.baidu.com/more" } }
-            ]
+            "template": "default",
+            "theme": "fresh-green",
+            "version": "1.4.43"
         }
-    }
     </script>
+    <input readonly="readonly" disabled="disabled" />
 </body>
 
 <!-- *************************** Module 形式加载引入 **************************** -->
@@ -59,13 +132,73 @@
     seajs.config({
         base: './src'
     });
-    define('start', function(require) {
+    define('start', function (require) {
         var Minder = require('kityminder').Minder;
+
+
 
         // 创建 km 实例
         var km = window.km = new Minder();
         km.setup('#minder-view');
+        km.disable()
+        km.execCommand('hand');
+       
+        var dragger = km._viewDragger   
+
+        
+        // dragger.move(new kity.Point(window.innerWidth/2 - 75, 40),300)
+
+        // window.addEventListener("resize", ()=>{
+        //     dragger.move(new kity.Point(window.innerWidth/2 - 75, 40),100)
+        // });
+
+        km.on('click', function() {
+            var node = km.getSelectedNode();
+           
+            if (node) {       
+                window.alert(node.getText())       
+                console.log('You selected: "%s"', node.getText());                
+            }
+        });
+
+        window.addEventListener('nodeSelected', function (e) { 
+            window.alert(km.getSelectedNode())
+            //window.alert(JSON.stringify(e))            
+        }, false);
+
+
+        onScale(window,(position)=>{
+            if(position > 1){
+                km.execCommand('zoomin');
+            }
+            else{
+                km.execCommand('zoomout');
+            }            
+        })
+
     });
+
+    function onScale(el, callback) {
+        let hypo = undefined;
+
+        el.addEventListener('touchmove', function (event) {
+            if (event.targetTouches.length === 2) {
+                let hypo1 = Math.hypot((event.targetTouches[0].pageX - event.targetTouches[1].pageX),
+                    (event.targetTouches[0].pageY - event.targetTouches[1].pageY));
+                if (hypo === undefined) {
+                    hypo = hypo1;
+                }
+                callback(hypo1 / hypo);
+            }
+        }, false);
+
+
+        el.addEventListener('touchend', function (event) {
+            hypo = undefined;
+        }, false);
+    }
     seajs.use('start');
+
 </script>
+
 </html>

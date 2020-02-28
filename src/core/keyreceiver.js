@@ -11,12 +11,12 @@ define(function(require, exports, module) {
 
     Minder.registerInitHook(function(option) {
         this.setDefaultOptions({
-            enableKeyReceiver: true
+            enableKeyReceiver: false
         });
         if (this.getOption('enableKeyReceiver')) {
-            this.on('paperrender', function() {
-                this._initKeyReceiver();
-            });
+            // this.on('paperrender', function() {
+            //     this._initKeyReceiver();
+            // });
         }
     });
 
